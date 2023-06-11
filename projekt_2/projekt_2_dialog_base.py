@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_WtyczkaProjektDialogBase(object):
     def setupUi(self, WtyczkaProjektDialogBase):
         WtyczkaProjektDialogBase.setObjectName("WtyczkaProjektDialogBase")
-        WtyczkaProjektDialogBase.resize(400, 300)
+        WtyczkaProjektDialogBase.resize(400, 360)
         self.button_box = QtWidgets.QDialogButtonBox(WtyczkaProjektDialogBase)
         self.button_box.setGeometry(QtCore.QRect(30, 240, 341, 32))
         self.button_box.setOrientation(QtCore.Qt.Horizontal)
@@ -34,6 +34,9 @@ class Ui_WtyczkaProjektDialogBase(object):
         self.label_pole.setGeometry(QtCore.QRect(150, 190, 91, 31))
         self.label_pole.setText("")
         self.label_pole.setObjectName("label_pole")
+        self.mMapLayerComboBox_warstwa = QgsMapLayerComboBox(WtyczkaProjektDialogBase)
+        self.mMapLayerComboBox_warstwa.setGeometry(QtCore.QRect(120, 10, 160, 27))
+        self.mMapLayerComboBox_warstwa.setObjectName("mMapLayerComboBox_warstwa")
 
         self.retranslateUi(WtyczkaProjektDialogBase)
         self.button_box.accepted.connect(WtyczkaProjektDialogBase.accept) # type: ignore
@@ -45,6 +48,7 @@ class Ui_WtyczkaProjektDialogBase(object):
         WtyczkaProjektDialogBase.setWindowTitle(_translate("WtyczkaProjektDialogBase", "Projekt 2"))
         self.pushButton_wysokosc.setText(_translate("WtyczkaProjektDialogBase", "Oblicz wysokość"))
         self.pushButton_pole.setText(_translate("WtyczkaProjektDialogBase", "Oblicz pole"))
+from qgsmaplayercombobox import QgsMapLayerComboBox
 
 
 if __name__ == "__main__":

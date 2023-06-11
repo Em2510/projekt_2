@@ -26,6 +26,9 @@ import os
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+from qgis.utils import iface
+from qgis.core import *
+
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -42,3 +45,63 @@ class WtyczkaProjektDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        
+        self.pushButton_wysokosc.clicked.connect(self.policz_wysokosc)
+        self.pushButton_pole.clicked.connect(self.policz_pole)
+        
+        
+    def policz_wysokosc(self):
+        layer = iface.activeLayer()
+        selected = layer.selectedFeatures()
+        if len(selected) != 2:
+            iface.messageBar().pushMessage('Błąd', 'Wybierz dokładnie 2 punkty.', level=Qgis.Warning)
+            return    
+        PKT1 = selected[0].geometry().asPoint()
+        PKT2 = selected[1].geometry().asPoint()
+        roznica = abs(PKT1.z() -PKT2.z())
+        iface.messageBar().pushMessage("Wynik",  f"Różnica wysokości między punktami o numerach {PKT1.id()}, {PKT2.id()} wynosi: {roznica} [m]", level=Qgis.Info)
+        
+        
+    def policz_pole(self):
+        layer = iface.activeLayer()
+        selected = layer.selectedFeatures()
+        if len(selected) <  3:
+            iface.messageBar().pushMessage('Błąd', 'Wybierz co najmniej 3 punkty.', level=Qgis.Warning)
+            return   
+        x = selected[0].geometry()
+        temp_geom = []
+        xy = []
+        multi_geom = x.asMultiPolygon()
+
+        for i in multi_geom:
+            for j in i: 
+                temp_geom.extend(j)
+
+        for point in temp_geom:
+            xy.append([point.x(), point.y()])
+
+        geo = QgsGeometry.fromPolygonXY([xy])
+        pole = geo.area()
+        iface.messageBar().pushMessage("Wynik", f"Pole powierzchni figury o wierzchołkach w punktach: {punkty} wynosi: {pole} m²", level=Qgis.Info)
+        
+    def main():
+        layer = iface.activeLayer()
+        
+        if layer is None:
+            iface.messageBar().pushMessage('Błąd', 'Nie wybrano warstwy.', level=Qgis.Warning)
+            return
+        
+        selected_features = layer.selectedFeatures()
+        
+        if len(selected_features) < 2:
+            iface.messageBar().pushMessage('Błąd', 'Wybierz co najmniej 2 punkty.', level=Qgis.Warning)
+            return
+        
+        if len(selected_features) == 2:
+            calculate_height_difference()
+        else:
+            calculate_area()
+
+
+    main()        
+            
