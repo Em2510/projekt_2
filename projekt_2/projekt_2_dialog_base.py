@@ -20,6 +20,20 @@ class Ui_WtyczkaProjektDialogBase(object):
         self.button_box.setOrientation(QtCore.Qt.Horizontal)
         self.button_box.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.button_box.setObjectName("button_box")
+        self.pushButton_wysokosc = QtWidgets.QPushButton(WtyczkaProjektDialogBase)
+        self.pushButton_wysokosc.setGeometry(QtCore.QRect(150, 40, 91, 31))
+        self.pushButton_wysokosc.setObjectName("pushButton_wysokosc")
+        self.pushButton_pole = QtWidgets.QPushButton(WtyczkaProjektDialogBase)
+        self.pushButton_pole.setGeometry(QtCore.QRect(150, 150, 91, 31))
+        self.pushButton_pole.setObjectName("pushButton_pole")
+        self.label_wysokosc = QtWidgets.QLabel(WtyczkaProjektDialogBase)
+        self.label_wysokosc.setGeometry(QtCore.QRect(150, 90, 91, 31))
+        self.label_wysokosc.setText("")
+        self.label_wysokosc.setObjectName("label_wysokosc")
+        self.label_pole = QtWidgets.QLabel(WtyczkaProjektDialogBase)
+        self.label_pole.setGeometry(QtCore.QRect(150, 190, 91, 31))
+        self.label_pole.setText("")
+        self.label_pole.setObjectName("label_pole")
 
         self.retranslateUi(WtyczkaProjektDialogBase)
         self.button_box.accepted.connect(WtyczkaProjektDialogBase.accept) # type: ignore
@@ -29,6 +43,8 @@ class Ui_WtyczkaProjektDialogBase(object):
     def retranslateUi(self, WtyczkaProjektDialogBase):
         _translate = QtCore.QCoreApplication.translate
         WtyczkaProjektDialogBase.setWindowTitle(_translate("WtyczkaProjektDialogBase", "Projekt 2"))
+        self.pushButton_wysokosc.setText(_translate("WtyczkaProjektDialogBase", "Oblicz wysokość"))
+        self.pushButton_pole.setText(_translate("WtyczkaProjektDialogBase", "Oblicz pole"))
 
 
 if __name__ == "__main__":
