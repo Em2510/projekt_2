@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>489</width>
     <height>360</height>
    </rect>
   </property>
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>240</y>
+     <x>40</x>
+     <y>290</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -32,7 +32,7 @@
   <widget class="QPushButton" name="pushButton_wysokosc">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>200</x>
      <y>40</y>
      <width>91</width>
      <height>31</height>
@@ -45,7 +45,7 @@
   <widget class="QPushButton" name="pushButton_pole">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>200</x>
      <y>150</y>
      <width>91</width>
      <height>31</height>
@@ -58,10 +58,10 @@
   <widget class="QLabel" name="label_wysokosc">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>60</x>
      <y>90</y>
-     <width>91</width>
-     <height>31</height>
+     <width>351</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -71,10 +71,10 @@
   <widget class="QLabel" name="label_pole">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>60</x>
      <y>190</y>
-     <width>91</width>
-     <height>31</height>
+     <width>351</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -84,7 +84,7 @@
   <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_warstwa">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>170</x>
      <y>10</y>
      <width>160</width>
      <height>27</height>

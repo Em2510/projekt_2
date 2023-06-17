@@ -46,62 +46,62 @@ class WtyczkaProjektDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         
-        self.pushButton_wysokosc.clicked.connect(self.policz_wysokosc)
-        self.pushButton_pole.clicked.connect(self.policz_pole)
-        
-        
-    def policz_wysokosc(self):
-        layer = iface.activeLayer()
-        selected = layer.selectedFeatures()
-        if len(selected) != 2:
-            iface.messageBar().pushMessage('Błąd', 'Wybierz dokładnie 2 punkty.', level=Qgis.Warning)
-            return    
-        PKT1 = selected[0].geometry().asPoint()
-        PKT2 = selected[1].geometry().asPoint()
-        roznica = abs(PKT1.z() -PKT2.z())
-        iface.messageBar().pushMessage("Wynik",  f"Różnica wysokości między punktami o numerach {PKT1.id()}, {PKT2.id()} wynosi: {roznica} [m]", level=Qgis.Info)
-        
-        
-    def policz_pole(self):
-        layer = iface.activeLayer()
-        selected = layer.selectedFeatures()
-        if len(selected) <  3:
-            iface.messageBar().pushMessage('Błąd', 'Wybierz co najmniej 3 punkty.', level=Qgis.Warning)
-            return   
-        x = selected[0].geometry()
-        temp_geom = []
-        xy = []
-        multi_geom = x.asMultiPolygon()
+        self.pushButton_wysokosc.clicked.connect(self.policz_punkty)
+        self.pushButton_wysokosc.clicked.connect(self.wysokosc)
+        self.pushButton_pole.clicked.connect(self.pole)
 
-        for i in multi_geom:
-            for j in i: 
-                temp_geom.extend(j)
-
-        for point in temp_geom:
-            xy.append([point.x(), point.y()])
-
-        geo = QgsGeometry.fromPolygonXY([xy])
-        pole = geo.area()
-        iface.messageBar().pushMessage("Wynik", f"Pole powierzchni figury o wierzchołkach w punktach: {punkty} wynosi: {pole} m²", level=Qgis.Info)
+    def policz_punkty(self):
+        number_of_selected_features = len(self.mMapLayerComboBox_warstwa.currentLayer().selectedFeatures())
         
-    def main():
-        layer = iface.activeLayer()
-        
-        if layer is None:
-            iface.messageBar().pushMessage('Błąd', 'Nie wybrano warstwy.', level=Qgis.Warning)
-            return
-        
-        selected_features = layer.selectedFeatures()
-        
-        if len(selected_features) < 2:
-            iface.messageBar().pushMessage('Błąd', 'Wybierz co najmniej 2 punkty.', level=Qgis.Warning)
-            return
-        
-        if len(selected_features) == 2:
-            calculate_height_difference()
+    def wysokosc(self):
+        warstwa = self.mMapLayerComboBox_warstwa.currentLayer()
+        wspolrzedne = warstwa.selectedFeatures()
+        H = []
+        lista_nazwa = []
+        for kolumna in wspolrzedne:
+            h = kolumna["H"]
+            H.append(h)
+            nazwa = kolumna["EntityHandle"]
+            lista_nazwa.append(nazwa)
+        if len(H) > 2:
+            wybrane = len(H)
+            self.label_wysokosc.setText(f'Wymagana ilość: 2. Wybrano {wybrane}.')
+        elif len(H) < 2:
+            wybrane = len(H)
+            self.label_wysokosc.setText(f'Wymagana ilość: 2. Wybrano {wybrane}.')
         else:
-            calculate_area()
-
-
-    main()        
-            
+            wynik = H[1] - H[0]
+            pkt1 = lista_nazwa[0]
+            pkt2 = lista_nazwa[1]
+            self.label_wysokosc.setText(
+                f'Różnica wysokości między punktami {pkt1} a {pkt2} to {wynik} [m]')
+      
+    def pole(self):
+        warstwa = self.mMapLayerComboBox_warstwa.currentLayer()
+        wspolrzedne = warstwa.selectedFeatures()
+        nr = []
+        for kolumna in wspolrzedne:
+            n = float(kolumna["X"])
+            nr.append(n)
+        ile = len(nr)
+        punkty = []
+        for punkt in wspolrzedne:
+            punkty.append(punkt.geometry().asPoint())
+        if punkty[0] != punkty[-1]:
+            punkty.append(punkty[0])
+        X = []
+        Y = []
+        for i in punkty:
+            X.append(i[0])
+            Y.append(i[1])
+        self.label_pole.setText(str(X))
+        pole = 0
+        if ile >= 3:
+            for i in range(ile - 1):
+                x1, y1 = punkty[i]
+                x2, y2 = punkty[i + 1]
+                pole += (x1 * y2 - x2 * y1)
+            pole_dokl = round(abs(pole)/2,5)
+            self.label_pole.setText(f'Pole pomiędzy wybranymi {ile} punktami = {pole_dokl} m^2')
+        else:
+            self.label_pole.setText('Za mało. Należy wybrać 3 lub więcej punktów.')
