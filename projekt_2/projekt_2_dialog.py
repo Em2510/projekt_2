@@ -87,14 +87,11 @@ class WtyczkaProjektDialog(QtWidgets.QDialog, FORM_CLASS):
         punkty = []
         for punkt in wspolrzedne:
             punkty.append(punkt.geometry().asPoint())
+        if ile == 0:
+            self.label_pole.setText('Nie wybrano żadnych punktów.') 
         if punkty[0] != punkty[-1]:
             punkty.append(punkty[0])
-        X = []
-        Y = []
-        for i in punkty:
-            X.append(i[0])
-            Y.append(i[1])
-        self.label_pole.setText(str(X))
+        
         pole = 0
         if ile >= 3:
             for i in range(ile - 1):
@@ -103,5 +100,6 @@ class WtyczkaProjektDialog(QtWidgets.QDialog, FORM_CLASS):
                 pole += (x1 * y2 - x2 * y1)
             pole_dokl = round(abs(pole)/2,5)
             self.label_pole.setText(f'Pole pomiędzy wybranymi {ile} punktami = {pole_dokl} m^2')
+         
         else:
             self.label_pole.setText('Za mało. Należy wybrać 3 lub więcej punktów.')
